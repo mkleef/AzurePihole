@@ -1,0 +1,170 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "containerName": {
+            "type": "string"
+        },
+        "imageType": {
+            "type": "string",
+            "allowedValues": [
+                "Public",
+                "Private"
+            ]
+        },
+        "imageName": {
+            "type": "string"
+        },
+        "osType": {
+            "type": "string",
+            "allowedValues": [
+                "Linux",
+                "Windows"
+            ]
+        },
+        "numberCpuCores": {
+            "type": "string"
+        },
+        "memory": {
+            "type": "string"
+        },
+        "restartPolicy": {
+            "type": "string",
+            "allowedValues": [
+                "OnFailure",
+                "Always",
+                "Never"
+            ]
+        },
+        "ipAddressType": {
+            "type": "string"
+        },
+        "ports": {
+            "type": "array"
+        },
+        "subnetName": {
+            "type": "string"
+        },
+        "subnetAddressPrefix": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "location": "[parameters('location')]",
+            "name": "[parameters('containerName')]",
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2021-07-01",
+            "properties": {
+                "volumes": [
+                    {
+                        "azureFile": {
+                            "shareName": "piholedata",
+                            "storageAccountName": "MYPIHOLESTORAGE",
+                            "storageAccountKey": "MYSTORAGEACCOUNTKEY"
+                        },
+                        "name": "piholedata"
+                    },
+                    {
+                        "azureFile": {
+                            "shareName": "dnsmasq",
+                            "storageAccountName": "MYPIHOLESTORAGE",
+                            "storageAccountKey": "MYSTORAGEACCOUNTKEY"
+                        },
+                        "name": "dnsmasq"
+                    }
+                ],
+                "containers": [
+                    {
+                        "name": "[parameters('containerName')]",
+                        "properties": {
+                            "image": "[parameters('imageName')]",
+                            "resources": {
+                                "requests": {
+                                    "cpu": "[int(parameters('numberCpuCores'))]",
+                                    "memoryInGB": "[float(parameters('memory'))]"
+                                }
+                            },
+                            "ports": "[parameters('ports')]",
+                            "volumeMounts": [
+                                {
+                                    "name": "piholedata",
+                                    "mountPath": "/etc/pihole/",
+                                    "readOnly": false
+                                    },
+                                {
+                                    "name": "dnsmasq",
+                                    "mountPath": "/etc/dnsmasq.d/",
+                                    "readOnly": false
+                                    }
+                              ]
+                        }
+                    }
+                ],
+                "restartPolicy": "[parameters('restartPolicy')]",
+                "osType": "[parameters('osType')]",
+                "ipAddress": {
+                    "type": "[parameters('ipAddressType')]",
+                    "ports": "[parameters('ports')]"
+                },
+                "subnetIds": [
+                    {
+                        "id": "/subscriptions/MYSUBSCRIPTION/resourceGroups/Pihole/providers/Microsoft.Network/virtualNetworks/pihole-vnet/subnets/Priv"
+                    }
+                ]
+            },
+            "tags": {},
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', 'Microsoft.ContainerInstances-20220103152746vnet')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "name": "Microsoft.ContainerInstances-20220103152746vnet",
+            "apiVersion": "2018-05-01",
+            "resourceGroup": "Pihole",
+            "subscriptionId": "MYSUBSCRIPTION",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "name": "pihole-vnet/Priv",
+                            "id": "/subscriptions/MYSUBSCRIPTION/resourceGroups/Pihole/providers/Microsoft.Network/virtualNetworks/pihole-vnet/subnets/Priv",
+                            "properties": {
+                                "provisioningState": "Succeeded",
+                                "addressPrefix": "10.0.2.0/24",
+                                "networkSecurityGroup": {
+                                    "id": "/subscriptions/MYSUBSCRIPTION/resourceGroups/Pihole/providers/Microsoft.Network/networkSecurityGroups/pihole-NSG"
+                                },
+                                "serviceEndpoints": [],
+                                "delegations": [
+                                    {
+                                        "name": "ACIDelegationService",
+                                        "properties": {
+                                            "serviceName": "Microsoft.ContainerInstance/containerGroups",
+                                            "actions": [
+                                                "Microsoft.Network/virtualNetworks/subnets/action"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "privateEndpointNetworkPolicies": "Enabled",
+                                "privateLinkServiceNetworkPolicies": "Enabled"
+                            },
+                            "type": "Microsoft.Network/virtualNetworks/subnets",
+                            "apiVersion": "2019-04-01"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
