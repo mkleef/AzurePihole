@@ -1,4 +1,4 @@
-# AzurePihole
+# Azure Pihole
 A repo for Azure Pihole configuration on Azure, utilizing JSON and the Template Deployment function of Azure. I originally wanted to use YAML, and had the code done for it except Azure doesn't let you configure a private network with YAML (long story, it needed some network group declaration which was complicated and then they finallly deprecated it so without this method there is literally no other way aside from manual UI methods or their AZ command line interface to get private V-nets to work). 
 
 **Let's get started**
