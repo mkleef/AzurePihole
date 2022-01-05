@@ -6,6 +6,7 @@ This code assumes that you have already configured a few things. Here's what you
 1. You need a resource group. Let's call it 'pihole'. 
 2. You need to have a configured a Virtual Network with two subnets. I call mine 'pihole-vnet'. My two subnets are 'Pub' and is 10.0.1.0/24 and 'Priv' which is 10.0.2.0/24. 
 3. You need to have configured a storage account ('mystorageaccount') with two file shares. Mine are labeled as 'dnsmasq' and 'piholedata'
+4. I also created a Network Security Group and bound it to the Priv subnet. It's called pihole-NSG in my implementation and referenced in the JSON as such.
 
 Once you've done these, you can run the JSON template and parameters in Azure Deploy, obviously swapping out for the parameters you've chosen. 
 
