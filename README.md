@@ -17,13 +17,12 @@ The container itself is really cheap to run - cents per day.
 
 **Known issues**
 
-What this doesn't do is configure the network or set the password. 
+What this doesn't do is configure the network. 
 
-1. Take a look at the Docker Hub image instructions for how to set the password manually. I just haven't bothered to set it in the JSON yet. Find that here: https://hub.docker.com/r/pihole/pihole 
-2. Network wise because Azure's networking is pretty poor for containers, it's really difficult to use any of their services
+Network wise because Azure's networking is pretty poor for containers, it's really difficult to use any of their services
    1. Azure Application Gateway does not support Port 53, only HTTP and HTTPS.
    2. Azure Firewall is too expensive for a project like this charging like $1.60 per hour, without even factoring traffic fees. Nope. Plus it's awful to configure. 
    3. Their NAT only does outbound not inbound 
    4. All other services don't support Azure Container Instances 
    
-   What that means were left with is something else like NGINX or something else. I will likely choose NGINX in a VM because container networking is painful...more     to come. 
+What that means were left with is something else like NGINX or something else. 
