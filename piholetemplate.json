@@ -63,16 +63,16 @@
                     {
                         "azureFile": {
                             "shareName": "piholedata",
-                            "storageAccountName": "MYPIHOLESTORAGE",
-                            "storageAccountKey": "MYSTORAGEACCOUNTKEY"
+                            "storageAccountName": "piholestoragemk",
+                            "storageAccountKey": "dV+59P4OoT7obLqQaQK30clZBHn6qee8vzCncdXdMuC6i4GVhriL0j1aEhk1UfP+QaJgK/4GOi+0IJPCTkyuNQ=="
                         },
                         "name": "piholedata"
                     },
                     {
                         "azureFile": {
                             "shareName": "dnsmasq",
-                            "storageAccountName": "MYPIHOLESTORAGE",
-                            "storageAccountKey": "MYSTORAGEACCOUNTKEY"
+                            "storageAccountName": "piholestoragemk",
+                            "storageAccountKey": "dV+59P4OoT7obLqQaQK30clZBHn6qee8vzCncdXdMuC6i4GVhriL0j1aEhk1UfP+QaJgK/4GOi+0IJPCTkyuNQ=="
                         },
                         "name": "dnsmasq"
                     }
@@ -88,6 +88,16 @@
                                     "memoryInGB": "[float(parameters('memory'))]"
                                 }
                             },
+                            "environmentVariables": [
+                                {
+                                  "name": "TZ",
+                                  "value": "America/Los_Angeles"
+                                },
+                                {
+                                  "name": "WEBPASSWORD",
+                                  "value": "MyPassword"
+                                  }
+                              ],
                             "ports": "[parameters('ports')]",
                             "volumeMounts": [
                                 {
@@ -112,7 +122,7 @@
                 },
                 "subnetIds": [
                     {
-                        "id": "/subscriptions/MYSUBSCRIPTION/resourceGroups/Pihole/providers/Microsoft.Network/virtualNetworks/pihole-vnet/subnets/Priv"
+                        "id": "/subscriptions/ac0df657-8f58-4b2b-b3f0-4114611a4c97/resourceGroups/Pihole/providers/Microsoft.Network/virtualNetworks/pihole-vnet/subnets/Priv"
                     }
                 ]
             },
@@ -126,7 +136,7 @@
             "name": "Microsoft.ContainerInstances-20220103152746vnet",
             "apiVersion": "2018-05-01",
             "resourceGroup": "Pihole",
-            "subscriptionId": "MYSUBSCRIPTION",
+            "subscriptionId": "ac0df657-8f58-4b2b-b3f0-4114611a4c97",
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -137,12 +147,12 @@
                     "resources": [
                         {
                             "name": "pihole-vnet/Priv",
-                            "id": "/subscriptions/MYSUBSCRIPTION/resourceGroups/Pihole/providers/Microsoft.Network/virtualNetworks/pihole-vnet/subnets/Priv",
+                            "id": "/subscriptions/ac0df657-8f58-4b2b-b3f0-4114611a4c97/resourceGroups/Pihole/providers/Microsoft.Network/virtualNetworks/pihole-vnet/subnets/Priv",
                             "properties": {
                                 "provisioningState": "Succeeded",
                                 "addressPrefix": "10.0.2.0/24",
                                 "networkSecurityGroup": {
-                                    "id": "/subscriptions/MYSUBSCRIPTION/resourceGroups/Pihole/providers/Microsoft.Network/networkSecurityGroups/pihole-NSG"
+                                    "id": "/subscriptions/ac0df657-8f58-4b2b-b3f0-4114611a4c97/resourceGroups/Pihole/providers/Microsoft.Network/networkSecurityGroups/pihole-NSG"
                                 },
                                 "serviceEndpoints": [],
                                 "delegations": [
