@@ -17,12 +17,14 @@ The container itself is really cheap to run - cents per day.
 
 **Known issues**
 
-What this doesn't do is configure the network. 
+What this doesn't do is configure the network or set NET_ADMIN parameters.
 
-Network wise because Azure's networking is pretty poor for containers, it's really difficult to use any of their services
+1. Network wise because Azure's networking is pretty poor for containers, it's really difficult to use any of their services
    1. Azure Application Gateway does not support Port 53, only HTTP and HTTPS.
    2. Azure Firewall is too expensive for a project like this charging like $1.60 per hour, without even factoring traffic fees. Nope. Plus it's awful to configure. 
    3. Their NAT only does outbound not inbound 
    4. All other services don't support Azure Container Instances 
    
-What that means were left with is something else like NGINX or something else. 
+   What that means were left with is something else like NGINX or something else. 
+   
+ 2. Azure Containers still doesn't support setting Linux options like NET_ADMIN. AWS does it...
